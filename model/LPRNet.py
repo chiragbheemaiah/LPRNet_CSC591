@@ -58,7 +58,19 @@ class LPRNet(nn.Module):
     def forward(self, x):
         keep_features = list()
         for i, layer in enumerate(self.backbone.children()):
+           
+            # Check if layer is MaxPool3d and print input shape before applying it
+            if isinstance(layer, nn.MaxPool3d):
+                # print(f"Input shape before MaxPool3d: {x.shape}")
+                x = x.unsqueeze(0)  # Add a new dimension at index 2 to make it 5D
+            
             x = layer(x)
+            
+            # Reshape back to 4D after MaxPool3d
+            if isinstance(layer, nn.MaxPool3d):
+            #   print(f"Output shape after MaxPool3d: {x.shape}")
+              x = x.squeeze(0)  # Remove the added dimension to make it 4D again
+            #   print(f"Output shape after MaxPool3d after squeeze: {x.shape}")
             if i in [2, 6, 13, 22]: # [2, 4, 8, 11, 22]
                 keep_features.append(x)
 
