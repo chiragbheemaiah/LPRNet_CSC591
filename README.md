@@ -1,45 +1,100 @@
-# LPRNet_Pytorch
-Pytorch Implementation For LPRNet, A High Performance And Lightweight License Plate Recognition Framework.  
-完全适用于中国车牌识别（Chinese License Plate Recognition）及国外车牌识别！  
-目前仅支持同时识别蓝牌和绿牌即新能源车牌等中国车牌，但可通过扩展训练数据或微调支持其他类型车牌及提高识别准确率！
+# LPRNet Optimization and Analysis
 
-# dependencies
+This repository contains the implementation and optimization of **LPRNet** (License Plate Recognition Network), a project conducted as part of the CSC591/791 coursework by Chirag Bheemaiah Palanganda Karumbaiah (cpalang@ncsu.edu) and Mukund Logasundar (mlogasu@ncsu.edu). The focus of this project was to evaluate and enhance the performance of LPRNet using techniques such as quantization, pruning, and Machine Learning Compiler (MLC) optimizations. The primary goal was to achieve an optimal balance of accuracy, inference speed, and model size, making the model efficient and suitable for deployment on resource-constrained devices.
 
-- pytorch >= 1.0.0
-- opencv-python 3.x
-- python 3.x
-- imutils
-- Pillow
-- numpy
+## Table of Contents
 
-# pretrained model
+1. [Introduction](#introduction)  
+2. [Experiments and Results](#experiments-and-results)  
+3. [Optimization Techniques](#optimization-techniques)  
+   - Quantization  
+   - Pruning  
+   - MLC Optimizations  
+4. [Setup and Installation](#setup-and-installation)  
+5. [Usage](#usage)  
+6. [Acknowledgments](#acknowledgments)  
 
-* [pretrained_model](https://github.com/sirius-ai/LPRNet_Pytorch/tree/master/weights/)
+---
 
-# training and testing
+## Introduction
 
-1. prepare your datasets, image size must be 94x24.
-2. base on your datsets path modify the scripts its hyperparameters --train_img_dirs or --test_img_dirs.
-3. adjust other hyperparameters if need.
-4. run 'python train_LPRNet.py' or 'python test_LPRNet.py'.
-5. if want to show testing result, add '--show true' or '--show 1' to run command.
+LPRNet is a lightweight and efficient model designed for license plate recognition tasks. This project evaluates LPRNet's performance under various optimization strategies, including:
 
-# performance
+- **Quantization**: Using weights-only quantization and Post-Training Static Quantization (PTSQ).  
+- **Pruning**: Applying structured and unstructured pruning strategies.  
+- **MLC Optimizations**: Leveraging TVM for auto-tuning and kernel optimization.  
 
-- personal test datasets.
-- include blue/green license plate.
-- images are very widely.
-- total test images number is 27320.
+The experiments were conducted on **Google Colab**, leveraging its Intel Xeon CPU for benchmarking.
 
-|  size  | personal test imgs(%) | inference@gtx 1060(ms) |
-| ------ | --------------------- | ---------------------- |
-|  1.7M  |         96.0+         |          0.5-          |
+---
 
-# References
+## Experiments and Results
 
-1. [LPRNet: License Plate Recognition via Deep Neural Networks](https://arxiv.org/abs/1806.10447v1)
-2. [PyTorch中文文档](https://pytorch-cn.readthedocs.io/zh/latest/)
 
-# postscript
+### Models Summary
 
-If you found this useful, please give me a star, thanks!
+| Optimization Technique              | Accuracy (%) | Inference Speed (ms) | Model Size (KB) |
+|-------------------------------------|--------------|-----------------------|-----------------|
+| Base Model                          | 90.1         | 211.56               | 1816.73         |
+| Quantization - Weights Only         | 89.9         | 43.14                | 533.57          |
+| Quantization - Post-Training Static | 83.0         | 25.45                | 637.38          |
+| Pruned Model I                      | 89.9         | 30.6                 | 1816.73*        |
+| Pruned Model II                     | 89.1         | 31.25                | 1816.73*        |
+| Pruned + PTSQ                       | 82.9         | 26.86                | 637.38          |
+| MLC Optimized - Manual              | X            | X                    | -               |
+| MLC Optimized - Auto                | 90.1         | 39.88                | 2905            |
+| All Optimizations Combined          | 90.0         | 35.50                | 2905            |
+
+> Note: For pruned models, the size reflects ONNX limitations and does not account for the structural pruning improvements.
+
+---
+
+## Optimization Techniques
+
+### 1. Quantization  
+Weights-only quantization reduced the model size and inference time while maintaining near-original accuracy. PTSQ further improved efficiency at the cost of a minor accuracy tradeoff.
+
+### 2. Pruning  
+Structured and unstructured pruning was applied using heuristics to prune less at lower feature levels, ensuring performance retention.
+
+### 3. Machine Learning Compiler (MLC) Optimizations  
+Auto-tuning via TVM optimized kernel operations, achieving significant speed-ups without sacrificing accuracy.
+
+---
+
+## Setup and Installation
+
+### Prerequisites
+- Python 3.8+
+- PyTorch
+- TVM
+- ONNX
+- Google Colab (recommended for testing)
+
+# Validation
+
+## Run Notebooks
+
+To validate our work and observe the impact of various optimization techniques, run the following Jupyter notebooks. Each notebook focuses on a specific optimization approach or combines multiple techniques.
+
+### 1. Weights-Only Quantization
+- **Notebook**: `Weights_only_Quantization.ipynb`
+- **Description**: Implements weights-only quantization to reduce model size and improve inference speed while maintaining acceptable accuracy.
+
+### 2. Post-Training Static Quantization
+- **Notebook**: `Post_Training_Static_Quantization.ipynb`
+- **Description**: Applies post-training static quantization using PyTorch's quantization utilities to reduce memory footprint and increase computational efficiency.
+
+### 3. Pruning
+- **Notebook**: `PruningLPRNet.ipynb`
+- **Description**: Demonstrates structured and unstructured pruning techniques to eliminate redundant parameters and reduce model complexity.
+
+### 4. MLC Optimization
+- **Notebook**: `MLC_LPRNet.ipynb`
+- **Description**: Uses TVM's auto-tuning capabilities to generate optimized computation schedules tailored to the LPRNet architecture.
+
+### 5. Combined Optimization
+- **Notebook**: `Optimized_Model_Inference.ipynb`
+- **Description**: Integrates quantization, pruning, and MLC optimization to achieve the best balance of accuracy, speed, and size in the final model.
+
+
