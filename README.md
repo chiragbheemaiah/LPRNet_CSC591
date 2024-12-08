@@ -38,10 +38,10 @@ The experiments were conducted on **Google Colab**, leveraging its Intel Xeon CP
 | Base Model                          | 90.1         | 211.56               | 1816.73         |
 | Quantization - Weights Only         | 89.9         | 43.14                | 533.57          |
 | Quantization - Post-Training Static | 83.0         | 25.45                | 637.38          |
-| Pruned Model I                      | 89.9         | 30.6                 | 1816.73*        |
-| Pruned Model II                     | 89.1         | 31.25                | 1816.73*        |
+| Global Unstructured Pruning         | 89.9         | 30.6                 | 1816.73*        |
+| Heuristic-based Unstructured Pruning| 89.1         | 31.25                | 1816.73*        |
 | Pruned + PTSQ                       | 82.9         | 26.86                | 637.38          |
-| MLC Optimized - Manual              | X            | X                    | -               |
+| MLC Optimized - Manual              | 90.1         | 42.7                 | 2726.49         |
 | MLC Optimized - Auto                | 90.1         | 39.88                | 2905            |
 | All Optimizations Combined          | 90.0         | 35.50                | 2905            |
 
@@ -55,7 +55,7 @@ The experiments were conducted on **Google Colab**, leveraging its Intel Xeon CP
 Weights-only quantization reduced the model size and inference time while maintaining near-original accuracy. PTSQ further improved efficiency at the cost of a minor accuracy tradeoff.
 
 ### 2. Pruning  
-Structured and unstructured pruning was applied using heuristics to prune less at lower feature levels, ensuring performance retention.
+Unstructured pruning and hueristic based pruning was applied using heuristics to prune less at lower feature levels, ensuring performance retention.
 
 ### 3. Machine Learning Compiler (MLC) Optimizations  
 Auto-tuning via TVM optimized kernel operations, achieving significant speed-ups without sacrificing accuracy.
