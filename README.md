@@ -68,8 +68,38 @@ Auto-tuning via TVM optimized kernel operations, achieving significant speed-ups
 - Python 3.8+
 - PyTorch
 - TVM
-- ONNX
 - Google Colab (recommended for testing)
+
+
+# Directory Structure
+
+```
+.
+├── data
+│   ├── test
+│   ├── __init__.py
+│   ├── load_data.py
+├── model
+│   ├── __init__.py
+│   └── LPRNet.py
+├── weights
+│   ├── Final_LPRNet_model.pth
+│   ├── lprnet_ptsq_and_pruning_weights.pth
+│   ├── lprnet_ptsq_weights.pth
+│   ├── lprnet_quantized_and_pruned_weights.pth
+│   ├── lprnet_quantized_weights.pth
+│   └── pruned_model_weights_trial2.pth
+├── LICENSE
+├── MLC_LPRNet.ipynb
+├── module.tar
+├── Optimized_Model_Inference.ipynb
+├── Post_Training_Static_Quantization.ipynb
+├── PruningLPRNet.ipynb
+├── README.md
+├── test_LPRNet.py
+├── train_LPRNet.py
+└── Weights_only_Quantization.ipynb
+```
 
 # Validation
 
